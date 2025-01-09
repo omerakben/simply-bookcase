@@ -2,10 +2,16 @@ import { NextResponse } from 'next/server';
 import { Author } from '../../types';
 import { db } from '../../utils/firebase-admin';
 
+type RouteParams = {
+  params: {
+    id: string;
+  };
+};
+
 // GET single author
 export async function GET(
   request: Request,
-  { params }: { params: { id: string } }
+  { params }: RouteParams
 ) {
   try {
     const doc = await db.collection('authors').doc(params.id).get();
@@ -27,7 +33,7 @@ export async function GET(
 // PATCH update author
 export async function PATCH(
   request: Request,
-  { params }: { params: { id: string } }
+  { params }: RouteParams
 ) {
   try {
     const data: Partial<Author> = await request.json();
@@ -46,7 +52,7 @@ export async function PATCH(
 // DELETE author
 export async function DELETE(
   request: Request,
-  { params }: { params: { id: string } }
+  { params }: RouteParams
 ) {
   try {
     await db.collection('authors').doc(params.id).delete();
