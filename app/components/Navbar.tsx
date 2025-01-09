@@ -1,13 +1,10 @@
-// Mark as client-side component since we're using browser APIs and state
-'use client';
+'use client'; // Mark as client-side component since we're using browser APIs and state
 
 // Import Firebase authentication utilities
 import { auth, googleProvider } from '@/lib/firebase/firebase';
 import { useAuth } from '@/lib/firebase/useAuth';
 import { signInWithPopup, signOut } from 'firebase/auth';
-
-// Next.js components for optimized image loading and client-side navigation
-import Image from 'next/image';
+import Image from 'next/image'; // Next.js components for optimized image loading and client-side navigation
 import Link from 'next/link';
 
 // React hooks for state management
@@ -21,6 +18,7 @@ export default function Navbar() {
 
   // State for search functionality
   const [searchQuery, setSearchQuery] = useState('');
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   // Handler for Google Sign-in
   // Uses Firebase popup authentication with Google provider
@@ -43,7 +41,7 @@ export default function Navbar() {
 
   return (
     // Main navigation container with white background and shadow
-    <nav className="bg-white shadow-md">
+    <nav className="bg-white-100 border-b-[3px] border-black">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           {/* Logo Section - Left side */}
@@ -54,70 +52,166 @@ export default function Navbar() {
                 alt="Bookcase Logo"
                 width={40}
                 height={40}
-                className="rounded-full"
+                className="rounded-full border-[3px] border-black"
               />
-              <span className="ml-2 text-xl font-bold text-gray-800">Bookcase</span>
+              <span className="ml-2 text-24-black">Bookcase</span>
             </Link>
           </div>
 
-          {/* Search Bar Section - Center */}
-          <div className="flex-1 max-w-lg mx-8">
-            <div className="relative">
+          {/* Search Bar Section - Center (hidden on mobile) */}
+          <div className="hidden md:flex flex-1 max-w-lg mx-8">
+            <div className="relative w-full">
               <input
                 type="text"
                 placeholder="Search books..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full px-4 py-2 rounded-full border-[3px] border-black focus:outline-none focus:border-primary text-16-medium placeholder:text-black-300"
               />
-              {/* Search Icon Button */}
               <button className="absolute right-3 top-2.5">
-                <svg className="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg className="h-5 w-5 text-black-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                 </svg>
               </button>
             </div>
           </div>
 
-          {/* Navigation Links and Auth Section - Right side */}
-          <div className="flex items-center space-x-4">
-            {/* Books navigation link */}
-            <Link href="/books" className="text-gray-700 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium">
+          {/* Hamburger Menu Button (visible on mobile) */}
+          <div className="md:hidden">
+            <button
+              onClick={() => setIsMenuOpen(!isMenuOpen)}
+              className="inline-flex items-center justify-center p-2 rounded-md text-black hover:text-primary"
+            >
+              <svg
+                className="h-6 w-6"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                {isMenuOpen ? (
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                ) : (
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+                )}
+              </svg>
+            </button>
+          </div>
+
+          {/* Navigation Links and Auth Section - Right side (hidden on mobile) */}
+          <div className="hidden md:flex items-center space-x-8">
+            <Link href="/books" className="text-16-medium hover:text-primary transition-colors">
               Books
             </Link>
+            <Link href="/authors" className="text-16-medium hover:text-primary transition-colors">
+              Authors
+            </Link>
 
-            {/* Conditional rendering based on authentication state */}
             {loading ? (
-              // Show loading skeleton while auth state is being determined
-              <div className="animate-pulse h-8 w-24 bg-gray-200 rounded"></div>
+              <div className="animate-pulse h-8 w-24 bg-gray-200 rounded-full"></div>
             ) : user ? (
-              // Show user profile and sign out button when logged in
-              <div className="flex items-center space-x-3">
+              <div className="flex items-center space-x-4">
                 <Image
-                  src={user.photoURL || '/default-avatar.png'} // Fallback to default avatar if no photo URL
+                  src={user.photoURL || '/default-avatar.png'}
                   alt="Profile"
                   width={32}
                   height={32}
-                  className="rounded-full"
+                  className="rounded-full border-[3px] border-black"
                 />
                 <button
                   onClick={handleSignOut}
-                  className="text-sm text-gray-700 hover:text-gray-900"
+                  className="text-16-medium hover:text-primary transition-colors"
                 >
                   Sign Out
                 </button>
               </div>
             ) : (
-              // Show sign in button when logged out
               <button
                 onClick={handleSignIn}
-                className="bg-blue-500 text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-blue-600 transition-colors"
+                className="login rounded-full hover:bg-secondary/10"
               >
-                Sign In with Google
+                Sign In
               </button>
             )}
           </div>
         </div>
+
+        {/* Mobile Menu (visible when hamburger is clicked) */}
+        {isMenuOpen && (
+          <div className="md:hidden">
+            <div className="px-2 pt-2 pb-3 space-y-1 border-t-2 border-gray-200">
+              {/* Search Bar for Mobile */}
+              <div className="px-2 py-2">
+                <div className="relative">
+                  <input
+                    type="text"
+                    placeholder="Search books..."
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    className="w-full px-4 py-2 rounded-full border-[3px] border-black focus:outline-none focus:border-primary text-16-medium placeholder:text-black-300"
+                  />
+                  <button className="absolute right-3 top-2.5">
+                    <svg className="h-5 w-5 text-black-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                    </svg>
+                  </button>
+                </div>
+              </div>
+
+              <Link
+                href="/books"
+                className="block px-3 py-2 text-16-medium hover:text-primary transition-colors"
+                onClick={() => setIsMenuOpen(false)}
+              >
+                Books
+              </Link>
+              <Link
+                href="/authors"
+                className="block px-3 py-2 text-16-medium hover:text-primary transition-colors"
+                onClick={() => setIsMenuOpen(false)}
+              >
+                Authors
+              </Link>
+
+              {!loading && (
+                <div className="px-3 py-2">
+                  {user ? (
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center space-x-3">
+                        <Image
+                          src={user.photoURL || '/default-avatar.png'}
+                          alt="Profile"
+                          width={32}
+                          height={32}
+                          className="rounded-full border-[3px] border-black"
+                        />
+                        <span className="text-16-medium">{user.displayName}</span>
+                      </div>
+                      <button
+                        onClick={() => {
+                          handleSignOut();
+                          setIsMenuOpen(false);
+                        }}
+                        className="text-16-medium hover:text-primary transition-colors"
+                      >
+                        Sign Out
+                      </button>
+                    </div>
+                  ) : (
+                    <button
+                      onClick={() => {
+                        handleSignIn();
+                        setIsMenuOpen(false);
+                      }}
+                      className="w-full text-center login rounded-full hover:bg-secondary/10"
+                    >
+                      Sign In
+                    </button>
+                  )}
+                </div>
+              )}
+            </div>
+          </div>
+        )}
       </div>
     </nav>
   );
