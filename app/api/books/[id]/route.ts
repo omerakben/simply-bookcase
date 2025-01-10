@@ -8,7 +8,7 @@ export async function GET(
   context: { params: { id: string } }
 ) {
   try {
-    const { id } = await context.params;
+    const { id } = context.params;
     const doc = await db.collection('books').doc(id).get();
 
     if (!doc.exists) {
@@ -31,7 +31,7 @@ export async function PATCH(
   context: { params: { id: string } }
 ) {
   try {
-    const { id } = await context.params;
+    const { id } = context.params;
     const data: Partial<Book> = await request.json();
     await db.collection('books').doc(id).update({
       ...data,
@@ -51,7 +51,7 @@ export async function DELETE(
   context: { params: { id: string } }
 ) {
   try {
-    const { id } = await context.params;
+    const { id } = context.params;
     await db.collection('books').doc(id).delete();
     return NextResponse.json({ success: true });
   } catch (error: unknown) {
