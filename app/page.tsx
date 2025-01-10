@@ -1,11 +1,14 @@
+import UnifiedSearchForm from './components/UnifiedSearchForm';
 
 export default function Home() {
   return (
-    <>
-      <div className="flex flex-col items-center justify-center h-screen">
-        <h1 className="text-4xl font-bold">Welcome to Bookcase</h1>
-      </div>
-    </>
+    <div className="green_container">
+      <h1 className="heading">Welcome to Bookcase</h1>
+      <p className="sub-heading">
+        Discover and share your favorite books with the community
+      </p>
+      <UnifiedSearchForm />
+    </div>
   );
 }
 

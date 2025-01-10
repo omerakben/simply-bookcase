@@ -12,6 +12,7 @@ export async function GET(request: Request) {
 
     const { searchParams } = new URL(request.url);
     const uid = searchParams.get('uid');
+    const searchQuery = searchParams.get('search')?.toLowerCase();
 
     if (!uid) {
       return NextResponse.json({ error: 'UID is required' }, { status: 400 });
@@ -28,29 +29,47 @@ export async function GET(request: Request) {
       .get();
 
     // If no books found with uid (possibly using mock data), fetch all books
+    let books: Book[];
     if (snapshot.empty) {
       const allBooksSnapshot = await query.get();
-      const books = allBooksSnapshot.docs.map((doc: QueryDocumentSnapshot) => {
+      books = allBooksSnapshot.docs.map((doc: QueryDocumentSnapshot) => {
         const data = doc.data();
         return {
           firebaseKey: doc.id,
-          ...data,
+          title: data.title || '',
+          author_id: data.author_id || '',
+          description: data.description || '',
+          image: data.image || '',
           price: parseFloat(data.price) || 0,
+          sale: data.sale || false,
           uid: uid // Add the current user's uid for mock data
-        };
+        } as Book;
       });
-      return NextResponse.json(books);
+    } else {
+      // Return books with uid
+      books = snapshot.docs.map((doc: QueryDocumentSnapshot) => {
+        const data = doc.data();
+        return {
+          firebaseKey: doc.id,
+          title: data.title || '',
+          author_id: data.author_id || '',
+          description: data.description || '',
+          image: data.image || '',
+          price: parseFloat(data.price) || 0,
+          sale: data.sale || false,
+          uid: data.uid
+        } as Book;
+      });
     }
 
-    // Return books with uid
-    const books = snapshot.docs.map((doc: QueryDocumentSnapshot) => {
-      const data = doc.data();
-      return {
-        firebaseKey: doc.id,
-        ...data,
-        price: parseFloat(data.price) || 0
-      };
-    });
+    // Apply search filter if search query exists
+    if (searchQuery) {
+      books = books.filter((book) => {
+        const titleMatch = book.title?.toLowerCase().includes(searchQuery);
+        const descriptionMatch = book.description?.toLowerCase().includes(searchQuery);
+        return titleMatch || descriptionMatch;
+      });
+    }
 
     return NextResponse.json(books);
 

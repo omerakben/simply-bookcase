@@ -1,11 +1,11 @@
 export interface Author {
   firebaseKey: string;
-  email: string;
   first_name: string;
   last_name: string;
+  email: string;
   image: string;
-  favorite: boolean;
   uid: string;
+  favorite: boolean;
 }
 
 export interface Book {
@@ -17,4 +17,15 @@ export interface Book {
   price: number;
   sale: boolean;
   uid: string;
+}
+
+export interface SearchResults {
+  books: (Book & { type: 'book' })[];
+  authors: (Author & { type: 'author' })[];
+  query: string;
+}
+
+export interface SearchParams {
+  uid: string;
+  q: string;
 }

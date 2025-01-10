@@ -6,6 +6,7 @@ import { useAuth } from '@/lib/firebase/useAuth';
 import { signInWithPopup, signOut } from 'firebase/auth';
 import Image from 'next/image'; // Next.js components for optimized image loading and client-side navigation
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 
 // React hooks for state management
 import { useState } from 'react';
@@ -15,6 +16,7 @@ export default function Navbar() {
   // user: contains user data if logged in, null if not
   // loading: indicates if auth state is being determined
   const { user, loading } = useAuth();
+  const router = useRouter();
 
   // State for search functionality
   const [searchQuery, setSearchQuery] = useState('');
@@ -39,6 +41,14 @@ export default function Navbar() {
     }
   };
 
+  const handleSearch = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!searchQuery.trim()) return;
+    router.push(`/books?search=${encodeURIComponent(searchQuery.trim())}`);
+    setSearchQuery('');
+    setIsMenuOpen(false);
+  };
+
   return (
     // Main navigation container with white background and shadow
     <nav className="bg-white-100 border-b-[3px] border-black">
@@ -60,7 +70,7 @@ export default function Navbar() {
 
           {/* Search Bar Section - Center (hidden on mobile) */}
           <div className="hidden md:flex flex-1 max-w-lg mx-8">
-            <div className="relative w-full">
+            <form onSubmit={handleSearch} className="relative w-full">
               <input
                 type="text"
                 placeholder="Search books..."
@@ -68,12 +78,12 @@ export default function Navbar() {
                 onChange={(e) => setSearchQuery(e.target.value)}
                 className="w-full px-4 py-2 rounded-full border-[3px] border-black focus:outline-none focus:border-primary text-16-medium placeholder:text-black-300"
               />
-              <button className="absolute right-3 top-2.5">
+              <button type="submit" className="absolute right-3 top-2.5">
                 <svg className="h-5 w-5 text-black-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                 </svg>
               </button>
-            </div>
+            </form>
           </div>
 
           {/* Hamburger Menu Button (visible on mobile) */}
@@ -145,7 +155,7 @@ export default function Navbar() {
             <div className="px-2 pt-2 pb-3 space-y-1 border-t-2 border-gray-200">
               {/* Search Bar for Mobile */}
               <div className="px-2 py-2">
-                <div className="relative">
+                <form onSubmit={handleSearch} className="relative">
                   <input
                     type="text"
                     placeholder="Search books..."
@@ -153,12 +163,12 @@ export default function Navbar() {
                     onChange={(e) => setSearchQuery(e.target.value)}
                     className="w-full px-4 py-2 rounded-full border-[3px] border-black focus:outline-none focus:border-primary text-16-medium placeholder:text-black-300"
                   />
-                  <button className="absolute right-3 top-2.5">
+                  <button type="submit" className="absolute right-3 top-2.5">
                     <svg className="h-5 w-5 text-black-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                     </svg>
                   </button>
-                </div>
+                </form>
               </div>
 
               {user && (

@@ -3,6 +3,7 @@
 import { useAuth } from '@/lib/firebase/useAuth';
 import Image from 'next/image';
 import Link from 'next/link';
+import { useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { Book } from '../api/types';
 
@@ -11,6 +12,8 @@ export default function BooksPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const { user } = useAuth();
+  const searchParams = useSearchParams();
+  const searchQuery = searchParams.get('search');
 
   useEffect(() => {
     const fetchBooks = async () => {
@@ -21,14 +24,18 @@ export default function BooksPage() {
 
       setError(null);
       try {
-        const response = await fetch(`/api/books?uid=${user.uid}`);
+        const url = new URL('/api/books', window.location.origin);
+        url.searchParams.set('uid', user.uid);
+        if (searchQuery) {
+          url.searchParams.set('search', searchQuery);
+        }
+
+        const response = await fetch(url.toString());
         const data = await response.json();
 
         if (!response.ok) {
           throw new Error(data.error || 'Failed to fetch books');
         }
-
-        console.log('Books API Response:', data);
 
         if (!Array.isArray(data)) {
           console.error('Invalid response format:', data);
@@ -45,7 +52,7 @@ export default function BooksPage() {
     };
 
     fetchBooks();
-  }, [user?.uid]);
+  }, [user?.uid, searchQuery]);
 
   if (!user) {
     return (
@@ -59,7 +66,7 @@ export default function BooksPage() {
             </div>
             <div className="ml-3">
               <h3 className="text-sm font-medium text-yellow-800">Authentication Required</h3>
-              <p className="mt-2 text-sm text-yellow-700">Please sign in to view your books.</p>
+              <p className="mt-2 text-sm text-yellow-700">Please sign in to view books.</p>
               <div className="mt-4">
                 <Link
                   href="/"
@@ -116,7 +123,9 @@ export default function BooksPage() {
   return (
     <div className="section_container">
       <div className="flex justify-between items-center mb-8">
-        <h1 className="text-30-bold">My Books</h1>
+        <h1 className="text-30-bold">
+          {searchQuery ? `Search Results for "${searchQuery}"` : 'My Books'}
+        </h1>
         <Link
           href="/books/new"
           className="bg-primary text-black font-bold py-2 px-6 rounded-full hover:bg-primary/80 transition-colors"
@@ -126,7 +135,11 @@ export default function BooksPage() {
       </div>
 
       {books.length === 0 ? (
-        <p className="no-result">No books found. Add some books to your collection!</p>
+        <p className="no-result">
+          {searchQuery
+            ? `No books found matching "${searchQuery}"`
+            : 'No books found. Add some books to your collection!'}
+        </p>
       ) : (
         <div className="card_grid">
           {books.map((book) => (
