@@ -82,7 +82,7 @@ export async function POST(request: Request) {
     // Add default values for optional fields
     const authorData = {
       ...data,
-      image: data.image || '/default-avatar.png',
+      image: data.image || '/author-avatar.png',
       favorite: data.favorite || false,
       createdAt: new Date().toISOString()
     };

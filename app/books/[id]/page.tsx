@@ -208,11 +208,15 @@ export default function BookDetailsPage() {
         <div className="grid md:grid-cols-2 gap-8">
           <div className="relative">
             <Image
-              src={book.image}
+              src={book.image && book.image.startsWith('http') ? book.image : '/bookcase-logo.png'}
               alt={book.title}
               width={500}
               height={300}
               className="rounded-lg shadow-lg object-cover w-full"
+              onError={(e) => {
+                const target = e.target as HTMLImageElement;
+                target.src = '/bookcase-logo.png';
+              }}
             />
             {book.sale && (
               <span className="absolute top-4 right-4 bg-red-500 text-white px-4 py-2 rounded-full font-bold">
@@ -225,11 +229,11 @@ export default function BookDetailsPage() {
             <div>
               <h2 className="text-20-medium">Author</h2>
               {author ? (
-                <Link href={`/authors/${author.firebaseKey}`} className="text-16-medium hover:text-primary">
+                <Link href={`/authors/${author.firebaseKey}`} className="text-30-bold hover:text-primary">
                   {`${author.first_name} ${author.last_name}`}
                 </Link>
               ) : (
-                <p className="text-16-medium text-gray-500">Author information unavailable</p>
+                <p className="text-30-bold text-gray-500">Author information unavailable</p>
               )}
             </div>
 

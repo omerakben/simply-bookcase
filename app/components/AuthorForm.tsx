@@ -109,7 +109,7 @@ export default function AuthorForm({ initialData, isEditing }: AuthorFormProps) 
         <div>
           <label
             htmlFor="first_name"
-            className="block text-sm font-medium text-gray-700"
+            className="block text-20-medium text-gray-700"
           >
             First Name
           </label>
@@ -120,14 +120,14 @@ export default function AuthorForm({ initialData, isEditing }: AuthorFormProps) 
             value={formData.first_name}
             onChange={handleChange}
             required
-            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary sm:text-sm"
+            className="mt-1 block w-full border-gray-300 shadow-m focus:border-primary focus:ring-primary sm:text-sm"
           />
         </div>
 
         <div>
           <label
             htmlFor="last_name"
-            className="block text-sm font-medium text-gray-700"
+            className="block text-20-medium text-gray-700"
           >
             Last Name
           </label>
@@ -138,14 +138,14 @@ export default function AuthorForm({ initialData, isEditing }: AuthorFormProps) 
             value={formData.last_name}
             onChange={handleChange}
             required
-            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary sm:text-sm"
+            className="mt-1 block w-full border-gray-300 shadow-sm focus:border-primary focus:ring-primary sm:text-sm"
           />
         </div>
 
         <div>
           <label
             htmlFor="email"
-            className="block text-sm font-medium text-gray-700"
+            className="block text-20-medium text-gray-700"
           >
             Email
           </label>
@@ -156,14 +156,14 @@ export default function AuthorForm({ initialData, isEditing }: AuthorFormProps) 
             value={formData.email}
             onChange={handleChange}
             required
-            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary sm:text-sm"
+            className="mt-1 block w-full border-gray-300 shadow-sm focus:border-primary focus:ring-primary sm:text-sm"
           />
         </div>
 
         <div>
           <label
             htmlFor="image"
-            className="block text-sm font-medium text-gray-700"
+            className="block text-20-medium text-gray-700"
           >
             Profile Image URL
           </label>
@@ -173,7 +173,7 @@ export default function AuthorForm({ initialData, isEditing }: AuthorFormProps) 
             name="image"
             value={formData.image}
             onChange={handleChange}
-            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary sm:text-sm"
+            className="mt-1 block w-full border-gray-300 shadow-sm focus:border-primary focus:ring-primary sm:text-sm"
           />
         </div>
 

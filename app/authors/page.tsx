@@ -103,14 +103,14 @@ export default function AuthorsPage() {
             >
               <div className="relative w-full mb-4">
                 <Image
-                  src={author.image && author.image.startsWith('http') ? author.image : '/default-avatar.png'}
+                  src={author.image && author.image.startsWith('http') ? author.image : '/author-avatar.png'}
                   alt={`${author.first_name} ${author.last_name}`}
                   width={300}
                   height={164}
                   className="book-card_img"
                   onError={(e) => {
                     const target = e.target as HTMLImageElement;
-                    target.src = '/default-avatar.png';
+                    target.src = '/author-avatar.png';
                   }}
                 />
                 {author.favorite && (

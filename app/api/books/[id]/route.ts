@@ -35,6 +35,7 @@ export async function PATCH(
     const data: Partial<Book> = await request.json();
     await db.collection('books').doc(id).update({
       ...data,
+      image: data.image || '/bookcase-logo.png',
       updatedAt: new Date().toISOString()
     });
 

@@ -135,7 +135,7 @@ export default function BookForm({ initialData, isEditing }: BookFormProps) {
         <div>
           <label
             htmlFor="title"
-            className="block text-sm font-medium text-gray-700"
+            className="block text-20-medium text-gray-700"
           >
             Title
           </label>
@@ -146,14 +146,14 @@ export default function BookForm({ initialData, isEditing }: BookFormProps) {
             value={formData.title}
             onChange={handleChange}
             required
-            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary sm:text-sm"
+            className="mt-1 block w-full border-gray-300 shadow-sm focus:border-primary focus:ring-primary sm:text-sm"
           />
         </div>
 
         <div>
           <label
             htmlFor="author_id"
-            className="block text-sm font-medium text-gray-700"
+            className="block text-20-medium text-gray-700"
           >
             Author
           </label>
@@ -163,7 +163,7 @@ export default function BookForm({ initialData, isEditing }: BookFormProps) {
             value={formData.author_id}
             onChange={handleChange}
             required
-            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary sm:text-sm"
+            className="mt-1 block w-full border-gray-300 shadow-sm focus:border-primary focus:ring-primary sm:text-sm"
           >
             <option value="">Select an author</option>
             {authors.map((author) => (
@@ -177,7 +177,7 @@ export default function BookForm({ initialData, isEditing }: BookFormProps) {
         <div>
           <label
             htmlFor="description"
-            className="block text-sm font-medium text-gray-700"
+            className="block text-20-medium text-gray-700"
           >
             Description
           </label>
@@ -187,14 +187,14 @@ export default function BookForm({ initialData, isEditing }: BookFormProps) {
             value={formData.description}
             onChange={handleChange}
             rows={4}
-            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary sm:text-sm"
+            className="mt-1 block w-full border-gray-300 shadow-sm focus:border-primary focus:ring-primary sm:text-sm"
           />
         </div>
 
         <div>
           <label
             htmlFor="image"
-            className="block text-sm font-medium text-gray-700"
+            className="block text-20-medium text-gray-700"
           >
             Image URL
           </label>
@@ -204,15 +204,14 @@ export default function BookForm({ initialData, isEditing }: BookFormProps) {
             name="image"
             value={formData.image}
             onChange={handleChange}
-            required
-            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary sm:text-sm"
+            className="mt-1 block w-full border-gray-300 shadow-sm focus:border-primary focus:ring-primary sm:text-sm"
           />
         </div>
 
         <div>
           <label
             htmlFor="price"
-            className="block text-sm font-medium text-gray-700"
+            className="block text-20-medium text-gray-700"
           >
             Price
           </label>
@@ -225,7 +224,7 @@ export default function BookForm({ initialData, isEditing }: BookFormProps) {
             required
             min="0"
             step="0.01"
-            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary sm:text-sm"
+            className="mt-1 block w-full border-gray-300 shadow-sm focus:border-primary focus:ring-primary sm:text-sm"
           />
         </div>
 
@@ -240,7 +239,7 @@ export default function BookForm({ initialData, isEditing }: BookFormProps) {
           />
           <label
             htmlFor="sale"
-            className="ml-2 block text-sm text-gray-700"
+            className="ml-2 block text-20-medium text-gray-700"
           >
             On Sale
           </label>

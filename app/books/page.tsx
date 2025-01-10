@@ -133,14 +133,14 @@ export default function BooksPage() {
             <Link href={`/books/${book.firebaseKey}`} key={book.firebaseKey} className="book-card group">
               <div className="relative w-full mb-4">
                 <Image
-                  src={book.image && book.image.startsWith('http') ? book.image : '/@bookcase-logo.png'}
+                  src={book.image && book.image.startsWith('http') ? book.image : '/bookcase-logo.png'}
                   alt={book.title}
                   width={300}
                   height={164}
                   className="book-card_img"
                   onError={(e) => {
                     const target = e.target as HTMLImageElement;
-                    target.src = '/@bookcase-logo.png';
+                    target.src = '/bookcase-logo.png';
                   }}
                 />
                 {book.sale && (
