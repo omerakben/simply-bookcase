@@ -2,13 +2,17 @@ import { NextRequest, NextResponse } from 'next/server';
 import { Author } from '../../types';
 import { db } from '../../utils/firebase-admin';
 
+// -- Add either or both of these lines:
+export const dynamic = 'force-dynamic';
+export const runtime = 'nodejs';
+
 // GET single author
 export async function GET(
   request: NextRequest,
-  context: { params: { id: string } }
+  { params }: { params: { id: string } }
 ) {
   try {
-    const { id } = context.params;
+    const { id } = params;
     const doc = await db.collection('authors').doc(id).get();
 
     if (!doc.exists) {
@@ -20,7 +24,8 @@ export async function GET(
       ...doc.data()
     });
   } catch (error: unknown) {
-    const errorMessage = error instanceof Error ? error.message : 'Failed to fetch author';
+    const errorMessage =
+      error instanceof Error ? error.message : 'Failed to fetch author';
     return NextResponse.json({ error: errorMessage }, { status: 500 });
   }
 }
@@ -28,11 +33,12 @@ export async function GET(
 // PATCH update author
 export async function PATCH(
   request: NextRequest,
-  context: { params: { id: string } }
+  { params }: { params: { id: string } }
 ) {
   try {
-    const { id } = context.params;
+    const { id } = params;
     const data: Partial<Author> = await request.json();
+
     await db.collection('authors').doc(id).update({
       ...data,
       updatedAt: new Date().toISOString()
@@ -40,7 +46,8 @@ export async function PATCH(
 
     return NextResponse.json({ success: true, firebaseKey: id });
   } catch (error: unknown) {
-    const errorMessage = error instanceof Error ? error.message : 'Failed to update author';
+    const errorMessage =
+      error instanceof Error ? error.message : 'Failed to update author';
     return NextResponse.json({ error: errorMessage }, { status: 500 });
   }
 }
@@ -48,14 +55,16 @@ export async function PATCH(
 // DELETE author
 export async function DELETE(
   request: NextRequest,
-  context: { params: { id: string } }
+  { params }: { params: { id: string } }
 ) {
   try {
-    const { id } = context.params;
+    const { id } = params;
     await db.collection('authors').doc(id).delete();
+
     return NextResponse.json({ success: true });
   } catch (error: unknown) {
-    const errorMessage = error instanceof Error ? error.message : 'Failed to delete author';
+    const errorMessage =
+      error instanceof Error ? error.message : 'Failed to delete author';
     return NextResponse.json({ error: errorMessage }, { status: 500 });
   }
 }
