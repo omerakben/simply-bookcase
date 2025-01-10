@@ -1,15 +1,15 @@
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import { Author } from '../../types';
 import { db } from '../../utils/firebase-admin';
 
 // GET single author
 export async function GET(
-  request: Request,
+  request: NextRequest,
   context: { params: { id: string } }
 ) {
   try {
-    const params = await context.params;
-    const doc = await db.collection('authors').doc(params.id).get();
+    const { id } = await context.params;
+    const doc = await db.collection('authors').doc(id).get();
 
     if (!doc.exists) {
       return NextResponse.json({ error: 'Author not found' }, { status: 404 });
@@ -27,18 +27,18 @@ export async function GET(
 
 // PATCH update author
 export async function PATCH(
-  request: Request,
+  request: NextRequest,
   context: { params: { id: string } }
 ) {
   try {
-    const params = await context.params;
+    const { id } = await context.params;
     const data: Partial<Author> = await request.json();
-    await db.collection('authors').doc(params.id).update({
+    await db.collection('authors').doc(id).update({
       ...data,
       updatedAt: new Date().toISOString()
     });
 
-    return NextResponse.json({ success: true, firebaseKey: params.id });
+    return NextResponse.json({ success: true, firebaseKey: id });
   } catch (error: unknown) {
     const errorMessage = error instanceof Error ? error.message : 'Failed to update author';
     return NextResponse.json({ error: errorMessage }, { status: 500 });
@@ -47,12 +47,12 @@ export async function PATCH(
 
 // DELETE author
 export async function DELETE(
-  request: Request,
+  request: NextRequest,
   context: { params: { id: string } }
 ) {
   try {
-    const params = await context.params;
-    await db.collection('authors').doc(params.id).delete();
+    const { id } = await context.params;
+    await db.collection('authors').doc(id).delete();
     return NextResponse.json({ success: true });
   } catch (error: unknown) {
     const errorMessage = error instanceof Error ? error.message : 'Failed to delete author';
