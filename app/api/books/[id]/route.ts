@@ -5,9 +5,10 @@ import { db } from '../../utils/firebase-admin';
 // GET single book
 export async function GET(
   request: Request,
-  { params }: { params: { id: string } }
+  context: { params: { id: string } }
 ) {
   try {
+    const params = await context.params;
     const doc = await db.collection('books').doc(params.id).get();
 
     if (!doc.exists) {
@@ -27,9 +28,10 @@ export async function GET(
 // PATCH update book
 export async function PATCH(
   request: Request,
-  { params }: { params: { id: string } }
+  context: { params: { id: string } }
 ) {
   try {
+    const params = await context.params;
     const data: Partial<Book> = await request.json();
     await db.collection('books').doc(params.id).update({
       ...data,
@@ -46,9 +48,10 @@ export async function PATCH(
 // DELETE book
 export async function DELETE(
   request: Request,
-  { params }: { params: { id: string } }
+  context: { params: { id: string } }
 ) {
   try {
+    const params = await context.params;
     await db.collection('books').doc(params.id).delete();
     return NextResponse.json({ success: true });
   } catch (error: unknown) {

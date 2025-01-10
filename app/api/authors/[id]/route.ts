@@ -2,18 +2,13 @@ import { NextResponse } from 'next/server';
 import { Author } from '../../types';
 import { db } from '../../utils/firebase-admin';
 
-type RouteParams = {
-  params: {
-    id: string;
-  };
-};
-
 // GET single author
 export async function GET(
   request: Request,
-  { params }: RouteParams
+  context: { params: { id: string } }
 ) {
   try {
+    const params = await context.params;
     const doc = await db.collection('authors').doc(params.id).get();
 
     if (!doc.exists) {
@@ -33,9 +28,10 @@ export async function GET(
 // PATCH update author
 export async function PATCH(
   request: Request,
-  { params }: RouteParams
+  context: { params: { id: string } }
 ) {
   try {
+    const params = await context.params;
     const data: Partial<Author> = await request.json();
     await db.collection('authors').doc(params.id).update({
       ...data,
@@ -52,9 +48,10 @@ export async function PATCH(
 // DELETE author
 export async function DELETE(
   request: Request,
-  { params }: RouteParams
+  context: { params: { id: string } }
 ) {
   try {
+    const params = await context.params;
     await db.collection('authors').doc(params.id).delete();
     return NextResponse.json({ success: true });
   } catch (error: unknown) {

@@ -99,12 +99,16 @@ export default function Navbar() {
 
           {/* Navigation Links and Auth Section - Right side (hidden on mobile) */}
           <div className="hidden md:flex items-center space-x-8">
-            <Link href="/books" className="text-16-medium hover:text-primary transition-colors">
-              Books
-            </Link>
-            <Link href="/authors" className="text-16-medium hover:text-primary transition-colors">
-              Authors
-            </Link>
+            {user && (
+              <>
+                <Link href="/books" className="text-16-medium hover:text-primary transition-colors">
+                  Books
+                </Link>
+                <Link href="/authors" className="text-16-medium hover:text-primary transition-colors">
+                  Authors
+                </Link>
+              </>
+            )}
 
             {loading ? (
               <div className="animate-pulse h-8 w-24 bg-gray-200 rounded-full"></div>
@@ -157,20 +161,24 @@ export default function Navbar() {
                 </div>
               </div>
 
-              <Link
-                href="/books"
-                className="block px-3 py-2 text-16-medium hover:text-primary transition-colors"
-                onClick={() => setIsMenuOpen(false)}
-              >
-                Books
-              </Link>
-              <Link
-                href="/authors"
-                className="block px-3 py-2 text-16-medium hover:text-primary transition-colors"
-                onClick={() => setIsMenuOpen(false)}
-              >
-                Authors
-              </Link>
+              {user && (
+                <>
+                  <Link
+                    href="/books"
+                    className="block px-3 py-2 text-16-medium hover:text-primary transition-colors"
+                    onClick={() => setIsMenuOpen(false)}
+                  >
+                    Books
+                  </Link>
+                  <Link
+                    href="/authors"
+                    className="block px-3 py-2 text-16-medium hover:text-primary transition-colors"
+                    onClick={() => setIsMenuOpen(false)}
+                  >
+                    Authors
+                  </Link>
+                </>
+              )}
 
               {!loading && (
                 <div className="px-3 py-2">
